@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Taj!</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <audio autoplay loop id="Sound">
+        <source src="Libu-Libong Buwan (Uuwian) - Kyle Raphael (Official Music Video) - (320 Kbps) (1).mp3" type="audio/mp3">
+    </audio>
+
+    <div class="screen-section">
+        <h1 class="birthday-banner">Happy Birthday, My baby!!!</h1>
+        <h2>Can I make your day better?</h2>
+        
+        <div class="button-container">
+            <button id="yesBtn">Yes</button>
+        </div>
+        <div class="button-container">
+            <button id="noBtn">NO!</button>
+        </div>
+    </div>
+
+    <div id="bottomSection" class="screen-section">
+        <h2>Before we proceed with our date, take time to read this.</h2>
+        
+        <div class="envelopes-wrapper">
+            <div class="envelope-container" onclick="this.classList.toggle('open')">
+                <div class="letter-paper">
+                    <h4>Appreciation Letter ❤️</h4>
+                    <p>Insert your long appreciation message here. This paper will expand smoothly out of the flap when clicked so she can comfortably scroll and read everything you appreciate about her.</p>
+                </div>
+            </div>
+
+            <div class="envelope-container" id="birthdayEnvelope">
+                <div class="letter-paper" id="birthdayPaper">
+                    <h4>Birthday Letter 🎂</h4>
+                    <p>Insert your long birthday message here. Write all your wishes, jokes, and sweet paragraphs for Taj inside this section.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="finalReveal" class="final-reveal" style="display: none;">Bihis kana, aalis na tayo! 🩷</h2>
+    </div>
+
+    <script>
+        const audio = document.getElementById('Sound');
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const birthdayEnvelope = document.getElementById('birthdayEnvelope');
+        const birthdayPaper = document.getElementById('birthdayPaper');
+        const finalReveal = document.getElementById('finalReveal');
+
+        function playAudio() {
+            audio.play().catch(() => {});
+        }
+        window.addEventListener('DOMContentLoaded', playAudio);
+        window.addEventListener('click', () => {
+            if (audio.paused) audio.play();
+        }, { once: true });
+
+        yesBtn.addEventListener('click', () => {
+            noBtn.style.display = 'none';
+            document.getElementById('bottomSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function moveButton(e) {
+            e.preventDefault();
+            const padding = 30;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+            
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton);
+        noBtn.addEventListener('touchstart', moveButton);
+
+        birthdayEnvelope.addEventListener('click', function(e) {
+            if (!this.classList.contains('open')) {
+                this.classList.add('open');
+                checkScrollRequirement();
+            } else {
+                this.classList.remove('open');
+            }
+        });
+
+        function triggerReveal() {
+            if (finalReveal.style.display === 'none') {
+                finalReveal.style.display = 'block';
+                setTimeout(() => {
+                    finalReveal.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+            }
+        }
+
+        function checkScrollRequirement() {
+            setTimeout(() => {
+                if (birthdayPaper.scrollHeight <= birthdayPaper.clientHeight + 10) {
+                    triggerReveal();
+                }
+            }, 600);
+        }
+
+        birthdayPaper.addEventListener('scroll', () => {
+            const totalScrollableDistance = birthdayPaper.scrollHeight - birthdayPaper.clientHeight;
+            if (birthdayPaper.scrollTop >= totalScrollableDistance - 15) {
+                triggerReveal();
+            }
+        });
+
+        birthdayPaper.addEventListener('touchmove', () => {
+            const totalScrollableDistance = birthdayPaper.scrollHeight - birthdayPaper.clientHeight;
+            if (birthdayPaper.scrollTop >= totalScrollableDistance - 15) {
+                triggerReveal();
+            }
+        });
+    </script>
+</body>
+</html>
